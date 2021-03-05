@@ -1330,7 +1330,16 @@ let header = await driver.findElement(By.css('h1'));
 let text = await driver.executeScript('return arguments[0].innerText', header);
   {{< / code-panel >}}
   {{< code-panel language="kotlin" >}}
-    // code sample not available please raise a PR
+driver.apply {
+  val js = this as JavascriptExecutor // Creating JavascriptExecutor by type casting
+  val button: WebElement =
+    findElement(By.name("btnLogin")) // Specifying non-null type explicitly since the findElement function throws an exception on failure
+  val text = js.run {
+    executeScript("console.log('hello world')") // Executing JS directly
+    executeScript("arguments[0].click();", button) // Clicking element
+    executeScript("return arguments[0].innerText", button) as String // Getting return value from JS
+  }
+}
   {{< / code-panel >}}
 {{< / code-tab >}}
 
